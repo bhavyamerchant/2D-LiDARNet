@@ -39,7 +39,7 @@ load_LiDAR <- function()
 }
 
 getwd()
-setwd("C:/Users/young/Desktop/EAS Project/Final Project/Data Frames/28x28 ubyte MNIST Data Frame") #Make sure to change the WD from 28x28 to 48x48 or vice versa
+setwd() #Make sure to change the WD from 28x28 to 48x48 or vice versa
 
 #Using the function, load in our LiDAR Dataframe
 LiDAR <- load_LiDAR()
