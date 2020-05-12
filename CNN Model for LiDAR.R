@@ -36,7 +36,7 @@ load_LiDAR <- function()
 }
 
 getwd()
-setwd("C:/Users/young/Desktop/EAS Project/Final Project/Data Frames/48x48 ubyte MNIST Data Frame")
+setwd()
 
 #Using the function, load in our LiDAR Dataframe
 LiDAR <- load_LiDAR()
