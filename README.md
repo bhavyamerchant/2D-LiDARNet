@@ -1,5 +1,4 @@
 # 2D-LiDARNet
-# Originally created for Math 4339: Introduction to Data Science and Machine Learning at University of Houston with the Dr. Skripnikov and Dr. Poliak as instructors
-# Purpose - to create a neural network model that could correctly identify vegetation vs no vegetation from cross sectional images from LiDAR
-# We obtained LiDAR scans of Enchanted Rock during the EAS Geophysics Summer Field Camp in 2018 and performed preprocessing methods
-# The "Preprocessing.R" script shows how the preprocessing was performed.
+Originally created for Math 4339: Introduction to Data Science and Machine Learning at University of Houston with the Dr. Skripnikov and Dr. Poliak as instructors. Our purpose was to create a neural network model that could correctly identify vegetation vs no vegetation from cross sectional images from LiDAR. We obtained LiDAR scans of Enchanted Rock during the EAS Geophysics Summer Field Camp in 2018 and performed preprocessing methods.
+# Preprocessing
+The "Preprocessing.R" script shows how the preprocessing was performed. We first converted the LiDAR point cloud dataset into cross sectional images of a rock face using cloud compare. Then, we split up the cross sections from 480 by 480 pixels into a hundred 48 by 48 pixel images. Then, we used a "black counter" to filter the dataset so that the cross sections with more than 20 black pixels were used.
