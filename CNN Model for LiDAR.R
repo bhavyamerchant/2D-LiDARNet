@@ -1,8 +1,12 @@
-#use_session_with_seed(3)
+#CNN Model
 
+#Load Libraries
 library(keras)
+library(tensorflow)
 library(EBImage)
 library(imager)
+library(abind)
+library(caret)
 
 load_LiDAR <- function()
 {
@@ -79,22 +83,44 @@ cat(nrow(x_test), 'test samples \n')
 y_train <- to_categorical(y_train, num_classes)
 y_test <- to_categorical(y_test, num_classes)
 
+#Append arrays
+x <- abind(x_train, x_test, along = 1)
+
+
+#Row Bind labels
+y <- rbind(y_train, y_test)
+
+#Stratify dataset split
+index <- createDataPartition(y[,1], p = .8, list = FALSE)
+
+train_x <- x[index,,,]
+test_x <- x[-index,,,]
+
+#For some reason, the "createDatatPartion" removes the 4th dimension from train_x and train_y
+#We add the 4th dimension back in here
+dim(train_x) <- c(dim(train_x),1)
+dim(test_x) <- c(dim(test_x),1)
+
+train_y <- y[index,]
+test_y <- y[-index,]
+
+
 #Initialize the Model
 CNNmodel <- keras_model_sequential() %>%
   layer_conv_2d(filters = 32, kernel_size = c(3,3), activation = 'relu',
                 input_shape = input_shape) %>%
   layer_conv_2d(filters = 64, kernel_size = c(3,3), activation = 'relu') %>%
   layer_max_pooling_2d(pool_size = c(2,2)) %>%
-  layer_dropout(rate = 0.25) %>%
+  layer_dropout(rate = 0.6) %>%
   layer_flatten()%>%
   layer_dense(units = 128, activation = 'relu') %>%
-  layer_dropout(rate = 0.5) %>%
+  layer_dropout(rate = 0.6) %>%
   layer_dense(units = num_classes, activation = 'softmax')
 
 #Compile the Model
 CNNmodel %>% compile(
   loss = loss_categorical_crossentropy,
-  optimizer = optimizer_adadelta(),
+  optimizer = optimizer_adam(lr = .001),
   metrics = c('accuracy')
 )
 
@@ -104,14 +130,14 @@ early_stop <- callback_early_stopping(monitor = "val_loss",
 
 #Train the Model
 CNNmodel %>% fit(
-  x_train, y_train,
+  train_x, train_y,
   batch_size = batch_size,
   epochs = epochs,
   validation_split = 0.2,
   callback= list(early_stop)
 )
 
-scores <- CNNmodel %>% evaluate(x_test, y_test, verbose = 0)
+scores <- CNNmodel %>% evaluate(test_x, test_y, verbose = 0)
 
 scores
 
