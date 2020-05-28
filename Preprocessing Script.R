@@ -1,14 +1,8 @@
-#Converting cross sections into subsections
+lidar_filenames <- list.files("./data/lidar/", full.names = TRUE)
 
-#Create a vector with all of the input file names
-inputCrossSections <- list.files ('./Cross Sections', full.names = TRUE)
-
-#Read all of the cross section csv files and put them into a list
-CrossSectionList <- list()
-
-for (i in 1:length (inputCrossSections))
+for (i in lidar)
 {
-  CrossSectionList[[i]] <- read.delim (inputCrossSections[i], header = F, sep = ",")
+  CrossSectionList[[i]] <- read.delim (i, header = F, sep = ",")
 }
 
 #Create PNG images from the csv files
